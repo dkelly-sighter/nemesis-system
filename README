@@ -1,0 +1,4 @@
+Install composer globablly or locally: https://getcomposer.org/download/
+
+php composer.phar install
+php main.php

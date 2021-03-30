@@ -1,0 +1,13 @@
+{
+    "name": "dkelly/nemesis-system",
+    "type": "project",
+    "require": {
+      "ext-json": "*",
+        "illuminate/container": "^8.35",
+        "nubs/random-name-generator": "^2.2"
+    },
+    "autoload": {
+	    "psr-4": {"Nemesis\\": "src/"}
+    },
+    "description": "Nemesis System"
+}
