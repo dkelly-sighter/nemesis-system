@@ -2,27 +2,27 @@
 
 namespace Nemesis;
 
-use DateTime;
-
 class Application {
 	/**
 	 * @var LeaderFactory
 	 */
 	private $leaderFactory;
+	/** @var HierarchyPrinter */
+	private $hierarchyPrinter;
 
-	/**
-	 */
 	public function __construct(
-		LeaderFactory $leaderFactory
+		LeaderFactory $leaderFactory,
+		HierarchyPrinter $hierarchyPrinter
 	) {
 		$this->leaderFactory = $leaderFactory;
+		$this->hierarchyPrinter = $hierarchyPrinter;
 	}
 
 	public function run() : void {
 		$leader = $this->leaderFactory->make();
-		$leader->getInfo();
+		$this->printHierarchy($leader);
 
-		$this->askForInput();
+//		$this->askForInput();
 	}
 
 	protected function askForInput(): void {
@@ -36,6 +36,13 @@ class Application {
 		fclose($handle);
 		echo "\n";
 		echo "Thank you, continuing...\n";
+	}
+
+	/**
+	 * @param Leader $leader
+	 */
+	protected function printHierarchy(Leader $leader): void {
+		$this->hierarchyPrinter->printHierarchy($leader);
 	}
 
 

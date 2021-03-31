@@ -7,7 +7,7 @@ class LeaderBuilder {
 	private $name;
 	private $birthday;
 	/**
-	 * @var Soldier[]
+	 * @var Leader[]
 	 */
 	private $soldiers;
 
@@ -28,13 +28,13 @@ class LeaderBuilder {
 		return $this->birthday;
 	}
 
-	public function addReports(Soldier ...$soldiers) : LeaderBuilder {
+	public function addReports(Leader ...$soldiers) : LeaderBuilder {
 		$this->soldiers = array_merge($this->soldiers, $soldiers);
 		return $this;
 	}
 
 	/**
-	 * @return Soldier[]
+	 * @return Leader[]
 	 */
 	public function getReports() : array {
 		return $this->soldiers;

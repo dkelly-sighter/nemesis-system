@@ -4,7 +4,7 @@ namespace Nemesis;
 
 class Leader extends Soldier {
 	/**
-	 * @var Soldier[]
+	 * @var Leader[]
 	 */
 	private $reports;
 
@@ -22,9 +22,8 @@ class Leader extends Soldier {
 		$this->reports = $leaderBuilder->getReports();
 	}
 
-	public function getInfo() {
-		echo "The leader is now " . $this->getNameString();
-		echo "They are " . $this->getAge() . " years old.";
-		echo "They have the following reports: ";
+	public function getFollowers() : array {
+		return $this->reports;
 	}
+
 }
