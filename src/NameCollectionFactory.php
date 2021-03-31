@@ -17,7 +17,8 @@ class NameCollectionFactory {
 	public function make() : NameCollection {
 		$generator = All::create();
 		$name = $generator->getName();
-		return new NameCollection($name);
+		$names = explode(" ", $name);
+		return new NameCollection(...$names);
 	}
 
 }

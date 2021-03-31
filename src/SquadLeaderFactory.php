@@ -2,27 +2,17 @@
 
 namespace Nemesis;
 
-class CaptainFactory {
+class SquadLeaderFactory {
 
 	/**
 	 * @var SoldierBuilderFactory
 	 */
 	private $soldierBuilderFactory;
-	/**
-	 * @var SquadLeaderFactory
-	 */
-	private $squadLeaderFactory;
 
-	/**
-	 * @param SoldierBuilderFactory $soldierBuilderFactory
-	 * @param SquadLeaderFactory    $squadLeaderFactory
-	 */
 	public function __construct(
-		SoldierBuilderFactory $soldierBuilderFactory,
-		SquadLeaderFactory $squadLeaderFactory
+		SoldierBuilderFactory $soldierBuilderFactory
 	) {
 		$this->soldierBuilderFactory = $soldierBuilderFactory;
-		$this->squadLeaderFactory = $squadLeaderFactory;
 	}
 
 	/**
@@ -32,8 +22,8 @@ class CaptainFactory {
 		$leaderBuilder = $this->soldierBuilderFactory->make();
 		$reports = [];
 		for ($i = 0; $i < 3; $i++) {
-			$squadLeader = $this->squadLeaderFactory->make();
-			$reports[] = $squadLeader;
+			$soliderBuilder = $this->soldierBuilderFactory->make();
+			$reports[] = $soliderBuilder->buildLeader();
 		}
 		$leaderBuilder->addReports(...$reports);
 		$leader = $leaderBuilder->buildLeader();

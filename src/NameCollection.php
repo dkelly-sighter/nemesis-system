@@ -16,4 +16,9 @@ class NameCollection {
 	public function getAsString() : string {
 		return implode(' ', $this->names);
 	}
+
+	public function getFirstName() : string {
+		return array_values($this->names)[0];
+	}
+
 }

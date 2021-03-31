@@ -22,16 +22,14 @@ class Soldier {
 		$this->leader = $leader;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getNameString(): string {
 		return $this->name->getAsString();
 	}
 
-	/**
-	 * @return int
-	 */
+	public function getFirstName() : string {
+		return $this->name->getFirstName();
+	}
+
 	public function getAge(): int {
 		$age = $this->birthday->getDateTimeInterface()->diff(new DateTime())->y;
 		return $age;
