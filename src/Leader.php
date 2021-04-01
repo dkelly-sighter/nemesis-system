@@ -26,4 +26,91 @@ class Leader extends Soldier {
 		return $this->reports;
 	}
 
+	public function die() {
+		if ($this->hasNoLeader()) {
+			$this->tryToPromote();
+		} else {
+			$this->giveFollowersToLeader();
+			$this->getLeader()->removeFollower($this);
+		}
+		parent::die();
+	}
+
+	public function addFollower(Soldier $soldier) : void {
+		$this->reports[] = $soldier;
+	}
+
+	public function removeFollower(Soldier $soldier) : void {
+		$newReports = [];
+		foreach ($this->getFollowers() as $follower) {
+			if ($soldier !== $follower) {
+				$newReports[] = $follower;
+			}
+		}
+		$this->reports = $newReports;
+	}
+
+	public function listenForDeath(Leader $leader) : void {
+		$newReports = [];
+		foreach ($this->getFollowers() as $follower) {
+			if ($follower === $leader) {
+				$newReports = array_merge($newReports, $follower->getFollowers());
+			} else {
+				$newReports[] = $follower;
+			}
+		}
+		$this->reports = $newReports;
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function hasNoLeader(): bool {
+		return empty($this->getLeader());
+	}
+
+	protected function giveFollowersToLeader(): void {
+		foreach ($this->reports as $report) {
+			$report->registerLeader($this->getLeader());
+			$this->getLeader()->listenForDeath($this);
+		}
+	}
+
+	/**
+	 * @return Leader
+	 */
+	protected function promoteNewLeader(): Leader {
+		$newLeader = $this->getFollowers()[0];
+		foreach ($newLeader->getFollowers() as $follower) {
+			$follower->registerLeader($newLeader);
+			$newLeader->addFollower($follower);
+		}
+		return $newLeader;
+	}
+
+	/**
+	 * @param array $followers
+	 *
+	 * @return bool
+	 */
+	protected function hasNoFollowers(array $followers): bool {
+		return empty($followers);
+	}
+
+	/**
+	 * @return Leader|null
+	 */
+	protected function tryToPromote(): ?Leader {
+		$followers = $this->getFollowers();
+		if ($this->hasNoFollowers($followers)) {
+			return $this->getLeader();
+		} else {
+			$newLeader = $this->promoteNewLeader();
+			return $newLeader;
+		}
+	}
+
+	public function getSoldier($soldierName) : Soldier {
+	}
+
 }

@@ -4,46 +4,69 @@ namespace Nemesis;
 
 class Application {
 	/**
-	 * @var LeaderFactory
+	 * @var HierarchyPrinter
 	 */
-	private $leaderFactory;
-	/** @var HierarchyPrinter */
 	private $hierarchyPrinter;
+	/**
+	 * @var HierarchyFactory
+	 */
+	private $hierarchyFactory;
+	/**
+	 * @var TargetGetter
+	 */
+	private $targetGetter;
 
+	/**
+	 * @param HierarchyPrinter $hierarchyPrinter
+	 * @param HierarchyFactory $hierarchyFactory
+	 * @param TargetGetter     $targetGetter
+	 */
 	public function __construct(
-		LeaderFactory $leaderFactory,
-		HierarchyPrinter $hierarchyPrinter
+		HierarchyPrinter $hierarchyPrinter,
+		HierarchyFactory $hierarchyFactory,
+		TargetGetter $targetGetter
 	) {
-		$this->leaderFactory = $leaderFactory;
 		$this->hierarchyPrinter = $hierarchyPrinter;
+		$this->hierarchyFactory = $hierarchyFactory;
+		$this->targetGetter = $targetGetter;
 	}
 
 	public function run() : void {
-		$leader = $this->leaderFactory->make();
-		$this->printHierarchy($leader);
+		$hierarchy = $this->hierarchyFactory->make();
+		$this->hierarchyPrinter->printHierarchy($hierarchy);
 
-//		$this->askForInput();
+		$continue = true;
+		while ($continue == true) {
+			$continue = $this->update($hierarchy);
+		}
+
+		echo "\n Thanks for playing \n";
 	}
 
-	protected function askForInput(): void {
-		echo "Are you sure you want to do this?  Type 'yes' to continue: ";
+	protected function update(Hierarchy $hierarchy) : bool {
+		$continue = true;
+		echo "\n Would you like to kill someone? Type 'yes' to continue: ";
 		$handle = fopen("php://stdin", "r");
 		$line = fgets($handle);
 		if (trim($line) != 'yes') {
-			echo "ABORTING!\n";
-			exit;
+			$continue = false;
+			return $continue;
 		}
 		fclose($handle);
-		echo "\n";
-		echo "Thank you, continuing...\n";
-	}
 
-	/**
-	 * @param Leader $leader
-	 */
-	protected function printHierarchy(Leader $leader): void {
-		$this->hierarchyPrinter->printHierarchy($leader);
-	}
+		$target = $this->targetGetter->getTarget($hierarchy);
+		echo "\n Killing leader " . $target->getNameString() . ". \n";
+		$target->die();
+		echo "\n Death to leader \n\n";
 
+		if ($hierarchy->isHierarchyDead()) {
+			echo " You have won ";
+			$continue = false;
+		} else {
+			$this->hierarchyPrinter->printHierarchy($hierarchy);
+			$hierarchy->updateHierarchy();
+		}
+		return $continue;
+	}
 
 }

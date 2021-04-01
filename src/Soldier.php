@@ -8,7 +8,11 @@ class Soldier {
 
 	private $name;
 	private $birthday;
-	private $leader;
+	protected $leader;
+	/**
+	 * @var false
+	 */
+	private $dead;
 
 	public function __construct(
 		NameCollection $name,
@@ -16,6 +20,7 @@ class Soldier {
 	) {
 		$this->name = $name;
 		$this->birthday = $birthday;
+		$this->dead = false;
 	}
 
 	public function registerLeader(Leader $leader) : void {
@@ -33,6 +38,27 @@ class Soldier {
 	public function getAge(): int {
 		$age = $this->birthday->getDateTimeInterface()->diff(new DateTime())->y;
 		return $age;
+	}
+
+	public function getLeader() : ?Leader {
+		return $this->leader;
+	}
+
+	public function getGeneral() : ?Soldier {
+		$leader = $this->getLeader();
+		if (!empty($leader)) {
+			return $leader->getGeneral();
+		}
+		return $this;
+	}
+
+	public function die() {
+		$this->dead = true;
+		return $this;
+	}
+
+	public function isDead() : bool {
+		return $this->dead;
 	}
 
 }

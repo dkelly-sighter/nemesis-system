@@ -31,7 +31,7 @@ class CaptainFactory {
 	public function make(): Leader {
 		$leaderBuilder = $this->soldierBuilderFactory->make();
 		$reports = [];
-		for ($i = 0; $i < 3; $i++) {
+		for ($i = 0; $i < 2; $i++) {
 			$squadLeader = $this->squadLeaderFactory->make();
 			$reports[] = $squadLeader;
 		}
