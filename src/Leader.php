@@ -111,6 +111,14 @@ class Leader extends Soldier {
 	}
 
 	public function getSoldier($soldierName) : Soldier {
+		if ($this->getFirstName() == $soldierName) {
+			return $this;
+		} else {
+			$followers = $this->getFollowers();
+			if (empty($followers)) {
+
+			}
+		}
 	}
 
 }

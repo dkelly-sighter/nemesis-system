@@ -43,11 +43,7 @@ class Hierarchy {
 	}
 
 	public function getSoldier(string $soldierName) : Soldier {
-		if ($this->leader->getFirstName() == $soldierName) {
-			return $this->leader;
-		} else {
-			return $this->leader->getSoldier($soldierName);
-		}
+		return $this->leader->getSoldier($soldierName);
 	}
 
 	protected function leaderIsDead() : bool {
