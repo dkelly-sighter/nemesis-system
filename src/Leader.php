@@ -8,9 +8,6 @@ class Leader extends Soldier {
 	 */
 	private $reports;
 
-	/**
-	 * @param LeaderBuilder $leaderBuilder
-	 */
 	public function __construct(
 		LeaderBuilder $leaderBuilder
 	) {
@@ -50,7 +47,7 @@ class Leader extends Soldier {
 		$this->reports = $newReports;
 	}
 
-	public function listenForDeath(Leader $leader) : void {
+	public function takeFollowersFromLeader(Leader $leader) : void {
 		$newReports = [];
 		foreach ($this->getFollowers() as $follower) {
 			if ($follower === $leader) {
@@ -62,9 +59,6 @@ class Leader extends Soldier {
 		$this->reports = $newReports;
 	}
 
-	/**
-	 * @return bool
-	 */
 	protected function hasNoLeader(): bool {
 		return empty($this->getLeader());
 	}
@@ -72,13 +66,10 @@ class Leader extends Soldier {
 	protected function giveFollowersToLeader(): void {
 		foreach ($this->reports as $report) {
 			$report->registerLeader($this->getLeader());
-			$this->getLeader()->listenForDeath($this);
+			$this->getLeader()->takeFollowersFromLeader($this);
 		}
 	}
 
-	/**
-	 * @return Leader
-	 */
 	protected function promoteNewLeader(): Leader {
 		$newLeader = $this->getFollowers()[0];
 		foreach ($newLeader->getFollowers() as $follower) {
@@ -88,18 +79,10 @@ class Leader extends Soldier {
 		return $newLeader;
 	}
 
-	/**
-	 * @param array $followers
-	 *
-	 * @return bool
-	 */
 	protected function hasNoFollowers(array $followers): bool {
 		return empty($followers);
 	}
 
-	/**
-	 * @return Leader|null
-	 */
 	protected function tryToPromote(): ?Leader {
 		$followers = $this->getFollowers();
 		if ($this->hasNoFollowers($followers)) {
